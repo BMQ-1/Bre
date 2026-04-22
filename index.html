@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>كسر الشفرة 🔐</title>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0a0c14;
+    --surface: #111622;
+    --surface2: #1a2035;
+    --border: #2a3555;
+    --accent: #f0c040;
+    --accent2: #e05a30;
+    --green: #2ecc71;
+    --yellow: #f1c40f;
+    --red: #e74c3c;
+    --text: #e8eaf0;
+    --muted: #7a8aaa;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(240,192,64,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(224,90,48,0.06) 0%, transparent 60%);
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; min-height: 100dvh; padding: 20px 16px 40px; flex-direction: column; align-items: center; }
+  .screen.active { display: flex; }
+
+  /* ── HEADER ── */
+  .logo {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: -1px;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .logo span { color: var(--accent2); }
+  .tagline { color: var(--muted); font-size: 0.85rem; text-align: center; margin-bottom: 32px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  /* ── INPUTS ── */
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  input:focus { border-color: var(--accent); }
+  input::placeholder { color: var(--muted); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s;
+    text-align: center;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent); color: #0a0c14; }
+  .btn-primary:hover { background: #ffd060; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
+  .btn-danger { background: var(--accent2); color: #fff; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── ROOM CODE ── */
+  .room-code-display {
+    background: var(--surface2);
+    border: 2px dashed var(--accent);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 4px;
+    margin: 12px 0;
+    cursor: pointer;
+    user-select: all;
+  }
+  .room-code-display small {
+    display: block;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0;
+    margin-top: 4px;
+  }
+
+  /* ── STATUS BADGE ── */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .status-badge.waiting { background: rgba(240,192,64,0.1); color: var(--accent); }
+  .status-badge.connected { background: rgba(46,204,113,0.1); color: var(--green); }
+  .status-badge.error { background: rgba(231,76,60,0.1); color: var(--red); }
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ── DIGIT PICKER ── */
+  .digit-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 16px 0;
+  }
+  .digit-slot {
+    width: 62px;
+    height: 72px;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .digit-slot.secret { border-color: var(--accent); background: rgba(240,192,64,0.07); }
+  .digit-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .digit-btns { display: flex; gap: 2px; margin-top: 4px; }
+  .digit-btn {
+    width: 26px;
+    height: 20px;
+    background: var(--border);
+    border: none;
+    border-radius: 4px;
+    color: var(--text);
+    font-size: 0.7rem;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+  }
+  .digit-btn:active { background: var(--accent); color: #0a0c14; }
+
+  /* ── GUESS ROW ── */
+  .guess-history {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    max-height: 45vh;
+    overflow-y: auto;
+    padding-left: 4px;
+  }
+  .guess-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideIn .25s ease;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  .guess-num { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--muted); min-width: 20px; }
+  .guess-digits { display: flex; gap: 6px; }
+  .guess-digit {
+    width: 44px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border: 2px solid transparent;
+  }
+  .guess-digit.green { background: rgba(46,204,113,0.15); border-color: var(--green); color: var(--green); }
+  .guess-digit.yellow { background: rgba(241,196,15,0.15); border-color: var(--yellow); color: var(--yellow); }
+  .guess-digit.red { background: rgba(231,76,60,0.12); border-color: var(--red); color: var(--red); }
+
+  /* ── TURN INDICATOR ── */
+  .turn-banner {
+    width: 100%;
+    max-width: 420px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+    transition: all .3s;
+  }
+  .turn-banner.my-turn { background: rgba(46,204,113,0.1); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+  .turn-banner.their-turn { background: rgba(240,192,64,0.08); color: var(--accent); border: 1px solid rgba(240,192,64,0.2); }
+
+  /* ── SCORE ── */
+  .score-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 12px;
+  }
+  .score-player { text-align: center; }
+  .score-name { font-size: 0.72rem; color: var(--muted); }
+  .score-val { font-size: 1.3rem; font-weight: 900; color: var(--accent); }
+
+  /* ── WIN ── */
+  .win-emoji { font-size: 4rem; text-align: center; margin-bottom: 8px; animation: pop .4s cubic-bezier(.36,2,.5,1); }
+  @keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
+  .win-text { font-size: 1.4rem; font-weight: 900; text-align: center; margin-bottom: 6px; }
+
+  /* ── LEGEND ── */
+  .legend { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--muted); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+  .legend-dot.green { background: var(--green); }
+  .legend-dot.yellow { background: var(--yellow); }
+  .legend-dot.red { background: var(--red); }
+
+  /* ── GUESS INPUT ROW ── */
+  .guess-input-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 10px;
+  }
+  .guess-input-row input {
+    flex: 1;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 6px;
+    text-align: center;
+    padding: 13px 8px;
+  }
+  .guess-input-row .btn { width: auto; padding: 13px 20px; flex-shrink: 0; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 8px; width: 100%; max-width: 420px; margin-bottom: 16px; }
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    transition: all .15s;
+  }
+  .tab.active { background: var(--accent); color: #0a0c14; border-color: var(--accent); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 20px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 999;
+    transition: transform .3s cubic-bezier(.36,2,.5,1);
+    white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  .divider { width: 100%; max-width: 420px; height: 1px; background: var(--border); margin: 8px 0; }
+
+  .secret-revealed {
+    background: rgba(231,76,60,0.08);
+    border: 1px dashed var(--red);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    color: var(--red);
+    text-align: center;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 6px;
+    margin-top: 4px;
+  }
+
+  /* small helper */
+  .mt8 { margin-top: 8px; }
+  .gap8 { gap: 8px; }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 1 — WELCOME
+════════════════════════════════════════ -->
+<div id="screen-welcome" class="screen active">
+  <div style="margin-top:20px; margin-bottom:4px; font-size:3rem; text-align:center;">🔐</div>
+  <div class="logo">كسر<span>الشفرة</span></div>
+  <div class="tagline">لعبة تخمين الرقم السري — لاعبان</div>
+
+  <div class="card">
+    <div class="card-title">اسمك في اللعبة</div>
+    <input type="text" id="playerName" placeholder="أدخل اسمك..." maxlength="16">
+  </div>
+
+  <div class="card">
+    <div class="card-title">طول التوليفة</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-secondary combo-len-btn" style="flex:1;min-width:70px" data-len="3">٣ أرقام</button>
+      <button class="btn btn-primary combo-len-btn active-len" style="flex:1;min-width:70px" data-len="4">٤ أرقام</button>
+      <button class="btn btn-secondary combo-len-btn" style="flex:1;min-width:70px" data-len="5">٥ أرقام</button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;width:100%;max-width:420px;">
+    <button class="btn btn-primary" style="flex:1" onclick="createRoom()">🏠 إنشاء غرفة</button>
+    <button class="btn btn-secondary" style="flex:1" onclick="showJoin()">🔗 انضمام</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 2 — HOST WAITING
+════════════════════════════════════════ -->
+<div id="screen-host" class="screen">
+  <div style="margin-top:20px"></div>
+  <div class="logo">🏠 غرفتك</div>
+  <div class="tagline">شارك الرمز مع صاحبك</div>
+
+  <div id="host-status" class="status-badge waiting">
+    <div class="pulse"></div>
+    <span>في انتظار لاعب ثانٍ...</span>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <div class="card-title">رمز الغرفة</div>
+    <div class="room-code-display" id="roomCodeDisplay" onclick="copyRoomCode()">
+      ----
+      <small>اضغط للنسخ 📋</small>
+    </div>
+    <div style="color:var(--muted);font-size:0.8rem">أرسل هذا الرمز للاعب الثاني</div>
+  </div>
+
+  <div id="opponentJoined" style="display:none;width:100%;max-width:420px">
+    <div class="card">
+      <div class="card-title">انضم اللاعب</div>
+      <div style="font-size:1.1rem;font-weight:700;color:var(--green)" id="opponentNameHost">—</div>
+    </div>
+    <button class="btn btn-primary" onclick="startGame()">🚀 ابدأ المباراة</button>
+  </div>
+
+  <div style="margin-top:16px">
+    <button class="btn btn-secondary" style="max-width:420px;width:100%" onclick="goHome()">← رجوع</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 3 — JOIN
+════════════════════════════════════════ -->
+<div id="screen-join" class="screen">
+  <div style="margin-top:20px"></div>
+  <div class="logo">🔗 انضمام</div>
+  <div class="tagline">أدخل رمز الغرفة</div>
+
+  <div id="join-status" class="status-badge waiting" style="display:none">
+    <div class="pulse"></div>
+    <span id="join-status-text">جاري الاتصال...</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">رمز الغرفة</div>
+    <input type="text" id="joinCodeInput" placeholder="مثال: ABC123" maxlength="8"
+      style="text-transform:uppercase;letter-spacing:4px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:1.3rem">
+  </div>
+
+  <div style="display:flex;gap:10px;width:100%;max-width:420px;">
+    <button class="btn btn-primary" style="flex:1" onclick="joinRoom()">🔗 انضمام</button>
+    <button class="btn btn-secondary" style="flex:1" onclick="goHome()">← رجوع</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 4 — SETUP (pick combo)
+════════════════════════════════════════ -->
+<div id="screen-setup" class="screen">
+  <div style="margin-top:16px"></div>
+  <div class="logo" style="font-size:1.8rem">🎯 اختر توليفتك السرية</div>
+  <div class="tagline" id="setup-tagline">لا يراها أحد غيرك!</div>
+
+  <div class="tabs" style="margin-top:16px">
+    <div class="tab active" id="tab-random" onclick="switchTab('random')">🎲 عشوائي</div>
+    <div class="tab" id="tab-manual" onclick="switchTab('manual')">✏️ يدوي</div>
+  </div>
+
+  <div id="tab-random-content" class="card" style="text-align:center">
+    <div class="card-title">توليفة عشوائية</div>
+    <div class="digit-row" id="randomDigits"></div>
+    <button class="btn btn-secondary mt8" onclick="generateRandom()">🔄 توليفة جديدة</button>
+  </div>
+
+  <div id="tab-manual-content" class="card" style="display:none;text-align:center">
+    <div class="card-title">أدخل توليفتك</div>
+    <div class="digit-row" id="manualDigits"></div>
+    <div style="color:var(--muted);font-size:0.75rem;margin-top:6px">اضغط ▲▼ لتغيير كل رقم</div>
+  </div>
+
+  <button class="btn btn-primary" style="max-width:420px;width:100%" onclick="confirmCombo()">✅ تأكيد التوليفة</button>
+
+  <div id="waitingForOpponent" style="display:none;margin-top:12px">
+    <div class="status-badge waiting">
+      <div class="pulse"></div>
+      <span>في انتظار خصمك...</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 5 — GAME
+════════════════════════════════════════ -->
+<div id="screen-game" class="screen">
+  <div style="margin-top:8px"></div>
+
+  <div class="score-bar">
+    <div class="score-player">
+      <div class="score-name" id="myNameScore">أنت</div>
+      <div class="score-val" id="myGuessCount">0</div>
+      <div style="font-size:0.65rem;color:var(--muted)">محاولة</div>
+    </div>
+    <div style="color:var(--muted);font-size:1.5rem;align-self:center">⚔️</div>
+    <div class="score-player">
+      <div class="score-name" id="oppNameScore">الخصم</div>
+      <div class="score-val" id="oppGuessCount">0</div>
+      <div style="font-size:0.65rem;color:var(--muted)">محاولة</div>
+    </div>
+  </div>
+
+  <div class="turn-banner my-turn" id="turnBanner">دورك — خمّن!</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot green"></div>رقم صح ومكانه صح</div>
+    <div class="legend-item"><div class="legend-dot yellow"></div>رقم صح مكانه غلط</div>
+    <div class="legend-item"><div class="legend-dot red"></div>الرقم غير موجود</div>
+  </div>
+
+  <div class="section-label">محاولاتك</div>
+  <div class="guess-history" id="myGuessHistory"></div>
+
+  <div class="guess-input-row" id="guessInputRow">
+    <input type="number" id="guessInput" placeholder="0000" min="0"
+      style="font-family:'IBM Plex Mono',monospace;font-size:1.3rem;letter-spacing:6px;text-align:center;"
+      oninput="limitGuessInput(this)" onkeydown="if(event.key==='Enter')submitGuess()">
+    <button class="btn btn-primary" onclick="submitGuess()">➤</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">محاولات خصمك</div>
+  <div class="guess-history" id="oppGuessHistory"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 6 — RESULT
+════════════════════════════════════════ -->
+<div id="screen-result" class="screen">
+  <div style="margin-top:40px"></div>
+  <div class="win-emoji" id="resultEmoji">🏆</div>
+  <div class="win-text" id="resultTitle">فزت!</div>
+  <div style="text-align:center;color:var(--muted);margin-bottom:24px;font-size:0.9rem" id="resultSub"></div>
+
+  <div class="card" style="text-align:center">
+    <div class="card-title">التوليفات السرية</div>
+    <div style="margin:8px 0">
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px" id="mySecretLabel">توليفتك</div>
+      <div class="digit-row" id="mySecretReveal" style="justify-content:center"></div>
+    </div>
+    <div style="margin:8px 0">
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px" id="oppSecretLabel">توليفة خصمك</div>
+      <div class="digit-row" id="oppSecretReveal" style="justify-content:center"></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;width:100%;max-width:420px;margin-top:8px;">
+    <button class="btn btn-primary" style="flex:1" onclick="playAgain()">🔄 جولة جديدة</button>
+    <button class="btn btn-secondary" style="flex:1" onclick="goHome()">🏠 الرئيسية</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let peer, conn;
+let myName = '';
+let opponentName = '';
+let isHost = false;
+let comboLength = 4;
+let myCombo = [];
+let opponentCombo = [];
+let myTurn = false;
+let myGuesses = [];
+let oppGuesses = [];
+let gameActive = false;
+let myReady = false;
+let oppReady = false;
+let myGuessPending = null; // digits I guessed (waiting for result)
+
+// ══════════════════════════════════════════
+//  SCREEN UTILS
+// ══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function toast(msg, dur=2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function goHome() {
+  if(conn) { try{conn.close();}catch(e){} }
+  if(peer) { try{peer.destroy();}catch(e){} }
+  conn = null; peer = null;
+  myCombo=[]; opponentCombo=[];
+  myGuesses=[]; oppGuesses=[];
+  myTurn=false; gameActive=false;
+  myReady=false; oppReady=false;
+  showScreen('screen-welcome');
+}
+
+// ══════════════════════════════════════════
+//  COMBO LENGTH SELECTOR
+// ══════════════════════════════════════════
+document.querySelectorAll('.combo-len-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    comboLength = parseInt(btn.dataset.len);
+    document.querySelectorAll('.combo-len-btn').forEach(b => {
+      b.classList.remove('btn-primary','active-len');
+      b.classList.add('btn-secondary');
+    });
+    btn.classList.remove('btn-secondary');
+    btn.classList.add('btn-primary','active-len');
+  });
+});
+
+// ══════════════════════════════════════════
+//  PEERJS HELPERS
+// ══════════════════════════════════════════
+function genRoomId() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+function initPeer(id) {
+  return new Promise((resolve, reject) => {
+    const p = new Peer(id, {
+      host: '0.peerjs.com',
+      port: 443,
+      secure: true,
+      path: '/',
+      config: {
+        iceServers: [
+          {urls:'stun:stun.l.google.com:19302'},
+          {urls:'stun:stun1.l.google.com:19302'}
+        ]
+      }
+    });
+    p.on('open', () => resolve(p));
+    p.on('error', err => reject(err));
+  });
+}
+
+// ══════════════════════════════════════════
+//  HOST
+// ══════════════════════════════════════════
+async function createRoom() {
+  myName = document.getElementById('playerName').value.trim() || 'مجهول';
+  showScreen('screen-host');
+
+  const roomId = genRoomId();
+  document.getElementById('roomCodeDisplay').childNodes[0].textContent = roomId;
+
+  try {
+    peer = await initPeer('csk-' + roomId);
+  } catch(e) {
+    setHostStatus('error', 'فشل الاتصال بالخادم');
+    return;
+  }
+
+  isHost = true;
+  setHostStatus('waiting', 'في انتظار لاعب ثانٍ...');
+
+  peer.on('connection', c => {
+    conn = c;
+    setupConn();
+  });
+}
+
+function setHostStatus(type, msg) {
+  const el = document.getElementById('host-status');
+  el.className = 'status-badge ' + type;
+  el.innerHTML = `<div class="pulse"></div><span>${msg}</span>`;
+}
+
+function copyRoomCode() {
+  const code = document.getElementById('roomCodeDisplay').childNodes[0].textContent.trim();
+  navigator.clipboard.writeText(code).then(() => toast('✅ تم نسخ الرمز!'));
+}
+
+function startGame() {
+  send({ type:'start', comboLength });
+  showSetupScreen();
+}
+
+// ══════════════════════════════════════════
+//  JOINER
+// ══════════════════════════════════════════
+function showJoin() {
+  myName = document.getElementById('playerName').value.trim() || 'مجهول';
+  showScreen('screen-join');
+}
+
+async function joinRoom() {
+  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+  if(code.length < 4) { toast('أدخل الرمز كاملاً'); return; }
+
+  const statusEl = document.getElementById('join-status');
+  statusEl.style.display = 'inline-flex';
+  statusEl.className = 'status-badge waiting';
+  document.getElementById('join-status-text').textContent = 'جاري الاتصال...';
+
+  try {
+    peer = await initPeer('csk-guest-' + Date.now());
+  } catch(e) {
+    statusEl.className = 'status-badge error';
+    document.getElementById('join-status-text').textContent = 'فشل الاتصال';
+    return;
+  }
+
+  isHost = false;
+  conn = peer.connect('csk-' + code, { reliable: true });
+  setupConn();
+}
+
+// ══════════════════════════════════════════
+//  CONNECTION SETUP
+// ══════════════════════════════════════════
+function setupConn() {
+  conn.on('open', () => {
+    if(!isHost) {
+      // Joiner announces themselves
+      send({ type:'hello', name: myName });
+      const statusEl = document.getElementById('join-status');
+      statusEl.className = 'status-badge connected';
+      document.getElementById('join-status-text').textContent = 'متصل ✓';
+    }
+  });
+
+  conn.on('data', handleMessage);
+
+  conn.on('error', e => toast('خطأ في الاتصال'));
+  conn.on('close', () => {
+    if(gameActive) toast('⚠️ انقطع الاتصال بالخصم');
+  });
+}
+
+// ══════════════════════════════════════════
+//  MESSAGING
+// ══════════════════════════════════════════
+function send(data) {
+  if(conn && conn.open) conn.send(data);
+}
+
+function handleMessage(msg) {
+  switch(msg.type) {
+    case 'hello':
+      // Host receives joiner's name
+      opponentName = msg.name;
+      document.getElementById('opponentNameHost').textContent = '👋 ' + opponentName;
+      document.getElementById('opponentJoined').style.display = 'block';
+      setHostStatus('connected', 'متصل بـ ' + opponentName);
+      send({ type:'welcome', name: myName });
+      break;
+
+    case 'welcome':
+      // Joiner receives host's name
+      opponentName = msg.name;
+      break;
+
+    case 'start':
+      // Host tells joiner to start (with combo length)
+      comboLength = msg.comboLength;
+      showSetupScreen();
+      break;
+
+    case 'ready':
+      // Opponent locked in their combo
+      oppReady = true;
+      opponentCombo = msg.combo; // host receives guest combo (we trust the network for this game)
+      checkBothReady();
+      break;
+
+    case 'guess':
+      // Opponent guessed MY combo - evaluate and send result
+      handleOpponentGuess(msg.digits);
+      break;
+
+    case 'result':
+      // Result of MY guess
+      handleMyGuessResult(msg.result, msg.won);
+      break;
+
+    case 'opp_guess_display':
+      // Show opponent's guess in their history column
+      addOppGuessRow(msg.digits, msg.result);
+      document.getElementById('oppGuessCount').textContent = oppGuesses.length;
+      break;
+
+    case 'game_over':
+      endGame(false, msg.opponentCombo);
+      break;
+
+    case 'play_again':
+      toast('🔄 خصمك يريد جولة جديدة!');
+      break;
+  }
+}
+
+// ══════════════════════════════════════════
+//  SETUP SCREEN
+// ══════════════════════════════════════════
+function showSetupScreen() {
+  buildDigitPickers();
+  generateRandom();
+  showScreen('screen-setup');
+}
+
+function buildDigitPickers() {
+  ['randomDigits','manualDigits'].forEach((id, isManual) => {
+    const container = document.getElementById(id);
+    container.innerHTML = '';
+    for(let i=0; i<comboLength; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'digit-slot ' + (isManual ? '' : 'secret');
+      slot.innerHTML = `
+        <div class="digit-val" id="${id}_d${i}">0</div>
+        ${isManual ? `<div class="digit-btns">
+          <button class="digit-btn" onclick="changeDigit('${id}',${i},1)">▲</button>
+          <button class="digit-btn" onclick="changeDigit('${id}',${i},-1)">▼</button>
+        </div>` : ''}
+      `;
+      container.appendChild(slot);
+    }
+  });
+}
+
+function changeDigit(id, i, dir) {
+  const el = document.getElementById(`${id}_d${i}`);
+  let v = (parseInt(el.textContent) + dir + 10) % 10;
+  el.textContent = v;
+}
+
+function generateRandom() {
+  for(let i=0; i<comboLength; i++) {
+    const el = document.getElementById(`randomDigits_d${i}`);
+    if(el) el.textContent = Math.floor(Math.random()*10);
+  }
+}
+
+function switchTab(tab) {
+  document.getElementById('tab-random').classList.toggle('active', tab==='random');
+  document.getElementById('tab-manual').classList.toggle('active', tab==='manual');
+  document.getElementById('tab-random-content').style.display = tab==='random' ? 'block' : 'none';
+  document.getElementById('tab-manual-content').style.display = tab==='manual' ? 'block' : 'none';
+}
+
+function confirmCombo() {
+  const activeTab = document.getElementById('tab-random').classList.contains('active') ? 'random' : 'manual';
+  const prefix = activeTab === 'random' ? 'randomDigits' : 'manualDigits';
+  myCombo = [];
+  for(let i=0; i<comboLength; i++) {
+    const el = document.getElementById(`${prefix}_d${i}`);
+    myCombo.push(parseInt(el.textContent));
+  }
+
+  myReady = true;
+  document.getElementById('waitingForOpponent').style.display = 'block';
+  document.querySelector('#screen-setup .btn-primary').disabled = true;
+  send({ type:'ready', combo: myCombo });
+  checkBothReady();
+}
+
+function checkBothReady() {
+  if(myReady && oppReady) {
+    startActualGame();
+  }
+}
+
+// ══════════════════════════════════════════
+//  GAME
+// ══════════════════════════════════════════
+function startActualGame() {
+  gameActive = true;
+  myGuesses = []; oppGuesses = [];
+  // Host goes first
+  myTurn = isHost;
+  buildGameScreen();
+  showScreen('screen-game');
+  updateTurnBanner();
+}
+
+function buildGameScreen() {
+  document.getElementById('myNameScore').textContent = myName;
+  document.getElementById('oppNameScore').textContent = opponentName;
+  document.getElementById('myGuessCount').textContent = '0';
+  document.getElementById('oppGuessCount').textContent = '0';
+  document.getElementById('myGuessHistory').innerHTML = '';
+  document.getElementById('oppGuessHistory').innerHTML = '';
+
+  const input = document.getElementById('guessInput');
+  input.placeholder = '0'.repeat(comboLength);
+  input.maxLength = comboLength;
+}
+
+function updateTurnBanner() {
+  const banner = document.getElementById('turnBanner');
+  const inputRow = document.getElementById('guessInputRow');
+  if(myTurn) {
+    banner.className = 'turn-banner my-turn';
+    banner.textContent = '⚡ دورك — خمّن التوليفة!';
+    inputRow.style.display = 'flex';
+  } else {
+    banner.className = 'turn-banner their-turn';
+    banner.textContent = `⏳ دور ${opponentName}...`;
+    inputRow.style.display = 'none';
+  }
+}
+
+function limitGuessInput(input) {
+  let val = input.value.replace(/\D/g,'');
+  if(val.length > comboLength) val = val.slice(0, comboLength);
+  input.value = val;
+}
+
+function submitGuess() {
+  if(!myTurn || !gameActive) return;
+  const raw = document.getElementById('guessInput').value.trim();
+  if(raw.length !== comboLength) {
+    toast(`أدخل ${comboLength} أرقام`);
+    return;
+  }
+  const digits = raw.split('').map(Number);
+  document.getElementById('guessInput').value = '';
+  myTurn = false;
+  updateTurnBanner();
+  myGuessPending = digits;
+  send({ type:'guess', digits });
+}
+
+function handleOpponentGuess(digits) {
+  // Evaluate against MY combo
+  const result = evaluateGuess(digits, myCombo);
+  const won = result.every(r => r === 'green');
+  send({ type:'result', result, won });
+  // Tell them what we display on our side
+  send({ type:'opp_guess_display', digits, result });
+  if(won) {
+    // opponent wins
+    endGame(false, myCombo);
+    send({ type:'game_over', opponentCombo: myCombo });
+  } else {
+    // give turn back to me
+    myTurn = true;
+    updateTurnBanner();
+  }
+}
+
+function handleMyGuessResult(result, won) {
+  // result for myGuessPending
+  const digits = myGuessPending;
+  myGuessPending = null;
+  addMyGuessRow(digits, result);
+  document.getElementById('myGuessCount').textContent = myGuesses.length;
+
+  if(won) {
+    endGame(true, opponentCombo);
+    send({ type:'game_over', opponentCombo: myCombo });
+  }
+  // turn switch happens in handleOpponentGuess on other side
+}
+
+function evaluateGuess(guess, secret) {
+  const result = Array(secret.length).fill('red');
+  const secretCopy = [...secret];
+  const guessCopy = [...guess];
+
+  // First pass: greens
+  for(let i=0; i<secret.length; i++) {
+    if(guessCopy[i] === secretCopy[i]) {
+      result[i] = 'green';
+      secretCopy[i] = null;
+      guessCopy[i] = null;
+    }
+  }
+  // Second pass: yellows
+  for(let i=0; i<secret.length; i++) {
+    if(guessCopy[i] === null) continue;
+    const idx = secretCopy.indexOf(guessCopy[i]);
+    if(idx !== -1) {
+      result[i] = 'yellow';
+      secretCopy[idx] = null;
+    }
+  }
+  return result;
+}
+
+function addMyGuessRow(digits, result) {
+  myGuesses.push({digits, result});
+  const container = document.getElementById('myGuessHistory');
+  const row = createGuessRow(myGuesses.length, digits, result);
+  container.prepend(row);
+}
+
+function addOppGuessRow(digits, result) {
+  oppGuesses.push({digits, result});
+  const container = document.getElementById('oppGuessHistory');
+  const row = createGuessRow(oppGuesses.length, digits, result);
+  container.prepend(row);
+}
+
+function createGuessRow(num, digits, result) {
+  const row = document.createElement('div');
+  row.className = 'guess-row';
+  const numEl = document.createElement('div');
+  numEl.className = 'guess-num';
+  numEl.textContent = '#' + num;
+  row.appendChild(numEl);
+  const dgEl = document.createElement('div');
+  dgEl.className = 'guess-digits';
+  digits.forEach((d,i) => {
+    const dEl = document.createElement('div');
+    dEl.className = 'guess-digit ' + result[i];
+    dEl.textContent = d;
+    dgEl.appendChild(dEl);
+  });
+  row.appendChild(dgEl);
+  return row;
+}
+
+// ══════════════════════════════════════════
+//  END GAME
+// ══════════════════════════════════════════
+function endGame(iWon, revealedOppCombo) {
+  gameActive = false;
+  if(revealedOppCombo) opponentCombo = revealedOppCombo;
+
+  document.getElementById('resultEmoji').textContent = iWon ? '🏆' : '😔';
+  document.getElementById('resultTitle').textContent = iWon ? 'فزت! 🎉' : 'خسرت!';
+  document.getElementById('resultSub').textContent = iWon
+    ? `كسرت الشفرة في ${myGuesses.length} محاولة!`
+    : `خصمك ${opponentName} كسر شفرتك!`;
+
+  document.getElementById('mySecretLabel').textContent = 'توليفتك كانت';
+  document.getElementById('oppSecretLabel').textContent = `توليفة ${opponentName} كانت`;
+
+  buildRevealDigits('mySecretReveal', myCombo, iWon ? '#2ecc71' : '#e74c3c');
+  buildRevealDigits('oppSecretReveal', opponentCombo, iWon ? '#e74c3c' : '#2ecc71');
+
+  showScreen('screen-result');
+}
+
+function buildRevealDigits(id, combo, color) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  combo.forEach(d => {
+    const slot = document.createElement('div');
+    slot.className = 'digit-slot';
+    slot.style.borderColor = color;
+    slot.style.background = color + '15';
+    const val = document.createElement('div');
+    val.className = 'digit-val';
+    val.style.color = color;
+    val.textContent = d;
+    slot.appendChild(val);
+    el.appendChild(slot);
+  });
+}
+
+function playAgain() {
+  send({ type:'play_again' });
+  myReady = false; oppReady = false;
+  myCombo = []; opponentCombo = [];
+  myGuesses = []; oppGuesses = [];
+  if(isHost) {
+    send({ type:'start', comboLength });
+  }
+  showSetupScreen();
+}
+</script>
+</body>
+</html>

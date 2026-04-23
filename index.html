@@ -38,105 +38,109 @@
 
   /* ── SCREENS & ANIMATIONS ── */
   .screen { display: none; min-height: 100dvh; padding: 20px 16px 40px; flex-direction: column; align-items: center; }
-  .screen.active { display: flex; animation: fadeUpIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-  @keyframes fadeUpIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .screen.active { display: flex; animation: fadeUpIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes fadeUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
   .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; border-color: var(--red) !important; }
-  @keyframes shake { 10%,90%{transform:translateX(-1px)} 20%,80%{transform:translateX(2px)} 30%,50%,70%{transform:translateX(-4px)} 40%,60%{transform:translateX(4px)} }
+  @keyframes shake { 10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)} 30%,50%,70%{transform:translateX(-6px)} 40%,60%{transform:translateX(6px)} }
 
   /* ── HEADER ── */
-  .logo { font-size: 2.4rem; font-weight: 900; color: var(--accent); letter-spacing: -1px; text-align: center; line-height: 1; margin-bottom: 6px; }
+  .logo { font-size: 2.6rem; font-weight: 900; color: var(--accent); letter-spacing: -1px; text-align: center; line-height: 1; margin-bottom: 6px; text-shadow: 0 4px 15px rgba(240,192,64,0.2); }
   .logo span { color: var(--accent2); }
-  .tagline { color: var(--muted); font-size: 0.85rem; text-align: center; margin-bottom: 32px; }
+  .tagline { color: var(--muted); font-size: 0.9rem; text-align: center; margin-bottom: 32px; }
 
   /* ── CARDS ── */
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 20px; width: 100%; max-width: 420px; margin-bottom: 16px; transition: transform 0.2s; }
+  .card { background: rgba(17, 22, 34, 0.8); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 20px; width: 100%; max-width: 420px; margin-bottom: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
   .card-title { font-size: 0.85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; text-align: center; }
 
   /* ── INPUTS ── */
-  input[type="text"] { width: 100%; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 13px 16px; color: var(--text); font-family: 'Cairo', sans-serif; font-size: 1rem; outline: none; transition: all .2s; text-align: center; }
-  input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(240,192,64,0.2); }
-  input::placeholder { color: var(--muted); }
+  input[type="text"] { width: 100%; background: var(--surface2); border: 2px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: 'Cairo', sans-serif; font-size: 1.1rem; outline: none; transition: all .3s; text-align: center; font-weight: 700; }
+  input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(240,192,64,0.2); transform: translateY(-2px); }
+  input::placeholder { color: var(--muted); font-weight: 400; }
 
   /* ── BUTTONS ── */
-  .btn { display: block; width: 100%; padding: 14px; border-radius: 10px; border: none; font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all .15s; text-align: center; }
-  .btn:active:not(:disabled) { transform: scale(0.95); }
-  .btn-primary { background: var(--accent); color: #0a0c14; }
-  .btn-primary:hover:not(:disabled) { background: #ffd060; box-shadow: 0 4px 15px rgba(240,192,64,0.3); }
-  .btn-secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
-  .btn-secondary:hover:not(:disabled) { border-color: var(--text); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn { display: block; width: 100%; padding: 14px; border-radius: 12px; border: none; font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; }
+  .btn:active:not(:disabled) { transform: scale(0.94); }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), #f1c40f); color: #0a0c14; box-shadow: 0 4px 15px rgba(240,192,64,0.3); }
+  .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,192,64,0.4); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 2px solid var(--border); }
+  .btn-secondary:hover:not(:disabled) { border-color: var(--text); transform: translateY(-2px); }
+  .btn-danger { background: rgba(231,76,60,0.1); color: var(--red); border: 2px solid rgba(231,76,60,0.3); }
+  .btn-danger:hover:not(:disabled) { background: rgba(231,76,60,0.2); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
   /* ── LEADERBOARD (SESSION SCORE) ── */
-  .leaderboard { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 420px; background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; margin-bottom: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+  .leaderboard { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 420px; background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
   .lb-player { text-align: center; flex: 1; }
-  .lb-name { font-size: 0.8rem; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
-  .lb-score { font-size: 1.8rem; font-weight: 900; color: var(--accent); line-height: 1; }
-  .lb-divider { font-size: 0.8rem; color: var(--muted); font-weight: 700; padding: 0 10px; display:flex; flex-direction:column; align-items:center; gap:4px;}
+  .lb-name { font-size: 0.9rem; color: var(--muted); font-weight: 800; margin-bottom: 6px; }
+  .lb-score { font-size: 2.2rem; font-weight: 900; color: var(--accent); line-height: 1; font-family: 'IBM Plex Mono', monospace; }
+  .lb-divider { font-size: 0.85rem; color: var(--muted); font-weight: 700; padding: 0 15px; display:flex; flex-direction:column; align-items:center; gap:6px;}
 
   /* ── STATUS BADGE ── */
-  .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; }
-  .status-badge.waiting { background: rgba(240,192,64,0.1); color: var(--accent); }
-  .status-badge.connected { background: rgba(46,204,113,0.1); color: var(--green); }
-  .status-badge.error { background: rgba(231,76,60,0.1); color: var(--red); }
+  .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 99px; font-size: 0.85rem; font-weight: 700; margin-bottom: 16px; transition: all 0.3s; }
+  .status-badge.waiting { background: rgba(240,192,64,0.1); color: var(--accent); border: 1px solid rgba(240,192,64,0.2); }
+  .status-badge.connected { background: rgba(46,204,113,0.1); color: var(--green); border: 1px solid rgba(46,204,113,0.2); }
+  .status-badge.error { background: rgba(231,76,60,0.1); color: var(--red); border: 1px solid rgba(231,76,60,0.2); }
   .pulse { width: 10px; height: 10px; border-radius: 50%; background: currentColor; animation: pulse 1.4s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes pulse { 0%,100%{opacity:1; transform:scale(1)} 50%{opacity:0.4; transform:scale(0.8)} }
 
   /* ── DIGIT PICKER ── */
   .digit-row { display: flex; gap: 10px; justify-content: center; margin: 16px 0; direction: ltr; }
-  .digit-slot { width: 60px; height: 75px; background: var(--surface2); border: 2px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; position: relative;}
-  .digit-slot.secret { border-color: var(--accent); background: rgba(240,192,64,0.07); }
-  .digit-val { font-family: 'IBM Plex Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 4px; transition: transform 0.2s;}
-  .digit-btns { display: flex; gap: 4px; width: 100%; justify-content: center; background: rgba(0,0,0,0.2); padding: 4px 0; }
-  .digit-btn { width: 22px; height: 20px; background: transparent; border: none; color: var(--muted); font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: background 0.1s;}
-  .digit-btn:active { background: var(--border); color: #fff; }
+  .digit-slot { width: 65px; height: 80px; background: var(--surface2); border: 2px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
+  .digit-slot.secret { border-color: var(--accent); background: rgba(240,192,64,0.05); }
+  .digit-val { font-family: 'IBM Plex Mono', monospace; font-size: 2.2rem; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 4px; transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+  .digit-btns { display: flex; gap: 6px; width: 100%; justify-content: center; background: rgba(0,0,0,0.3); padding: 4px 0; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+  .digit-btn { width: 26px; height: 22px; background: transparent; border: none; color: var(--muted); font-size: 0.75rem; cursor: pointer; border-radius: 6px; transition: all 0.1s; }
+  .digit-btn:active { background: var(--accent); color: #000; transform: scale(1.1); }
 
-  /* ── GUESS ROW ── */
-  .guess-history { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; max-height: 38vh; overflow-y: auto; padding-right: 4px; scroll-behavior: smooth; }
+  /* ── GUESS ROW & 3D FLIP ── */
+  .guess-history { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; max-height: 40vh; overflow-y: auto; padding-right: 4px; scroll-behavior: smooth; }
   .guess-row { display: flex; align-items: center; justify-content: center; gap: 12px; direction: ltr; margin-bottom: 4px; }
-  .guess-num { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--muted); min-width: 24px; text-align: right; }
-  .guess-digits { display: flex; gap: 6px; perspective: 1000px; }
+  .guess-num { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--muted); min-width: 28px; text-align: right; font-weight: 700; }
+  .guess-digits { display: flex; gap: 8px; perspective: 1000px; }
   
-  /* 3D Flip Animation for Results */
-  .guess-digit { width: 44px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 700; border: 2px solid transparent; animation: flipIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; transform-style: preserve-3d; }
-  @keyframes flipIn {
-    0% { transform: rotateX(-90deg); opacity: 0; }
-    100% { transform: rotateX(0deg); opacity: 1; }
-  }
+  .guess-digit { width: 48px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 1.6rem; font-weight: 700; border: 2px solid transparent; animation: flipIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; transform-style: preserve-3d; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  @keyframes flipIn { 0% { transform: rotateX(-90deg); opacity: 0; } 100% { transform: rotateX(0deg); opacity: 1; } }
   
   .guess-digit.green { background: rgba(46,204,113,0.15); border-color: var(--green); color: var(--green); }
   .guess-digit.yellow { background: rgba(241,196,15,0.15); border-color: var(--yellow); color: var(--yellow); }
-  .guess-digit.red { background: rgba(231,76,60,0.12); border-color: var(--red); color: var(--red); }
+  .guess-digit.red { background: rgba(231,76,60,0.1); border-color: var(--border); color: var(--muted); }
+
+  /* تلميح التكرار (النقطة المضيئة) */
+  .has-multi::after { content: ''; position: absolute; bottom: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 6px currentColor; animation: blinkHint 2s infinite alternate; }
+  @keyframes blinkHint { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
 
   /* ── TURN INDICATOR ── */
-  .turn-banner { width: 100%; max-width: 420px; padding: 12px 16px; border-radius: 10px; text-align: center; font-weight: 700; font-size: 1rem; margin-bottom: 14px; transition: all .3s; }
-  .turn-banner.my-turn { background: rgba(46,204,113,0.1); color: var(--green); border: 1px solid rgba(46,204,113,0.3); animation: pulseScale 2s infinite; }
-  .turn-banner.their-turn { background: rgba(240,192,64,0.08); color: var(--accent); border: 1px solid rgba(240,192,64,0.2); }
-  @keyframes pulseScale { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02)} }
+  .turn-banner { width: 100%; max-width: 420px; padding: 14px 16px; border-radius: 12px; text-align: center; font-weight: 800; font-size: 1.05rem; margin-bottom: 16px; transition: all .4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+  .turn-banner.my-turn { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.4); transform: scale(1.02); }
+  .turn-banner.their-turn { background: rgba(240,192,64,0.08); color: var(--accent); border: 1px solid rgba(240,192,64,0.2); opacity: 0.7; }
 
   /* ── LEGEND ── */
-  .legend { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; background: var(--surface2); padding: 10px; border-radius: 10px; max-width: 420px; width: 100%; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); font-weight: 600; }
-  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
-  .legend-dot.green { background: var(--green); }
-  .legend-dot.yellow { background: var(--yellow); }
-  .legend-dot.red { background: var(--red); }
+  .legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; max-width: 420px; width: 100%; border: 1px solid var(--border); }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text); font-weight: 700; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 4px; }
+  .legend-dot.green { background: var(--green); box-shadow: 0 0 8px rgba(46,204,113,0.4); }
+  .legend-dot.yellow { background: var(--yellow); box-shadow: 0 0 8px rgba(241,196,15,0.4); }
+  .legend-dot.red { background: var(--border); }
+  .legend-hint { font-size: 0.9rem; color: var(--accent); display: inline-block; animation: blinkHint 2s infinite alternate;}
 
   /* ── GUESS INPUT ROW ── */
-  .guess-input-row { display: flex; gap: 8px; width: 100%; max-width: 420px; margin-bottom: 16px; }
-  .guess-input-row input { flex: 1; font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; letter-spacing: 8px; direction: ltr; }
-  .guess-input-row .btn { width: auto; padding: 0 24px; font-size: 1.2rem; flex-shrink: 0; }
+  .guess-input-row { display: flex; gap: 10px; width: 100%; max-width: 420px; margin-bottom: 16px; }
+  .guess-input-row input { flex: 1; font-family: 'IBM Plex Mono', monospace; font-size: 1.8rem; letter-spacing: 12px; direction: ltr; padding: 12px; background: rgba(0,0,0,0.3); border-width: 2px;}
+  .guess-input-row .btn { width: auto; padding: 0 28px; font-size: 1.4rem; flex-shrink: 0; }
 
   /* ── TOAST ── */
-  #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 14px 24px; border-radius: 99px; font-size: 0.95rem; font-weight: 700; z-index: 999; transition: transform .4s cubic-bezier(.36,2,.5,1); white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; }
+  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(120px); background: rgba(255,255,255,0.95); color: #000; padding: 14px 28px; border-radius: 99px; font-size: 0.95rem; font-weight: 800; z-index: 999; transition: transform .4s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space: nowrap; box-shadow: 0 10px 40px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 8px; }
   #toast.show { transform: translateX(-50%) translateY(0); }
 
-  .section-label { font-size: 0.8rem; color: var(--muted); font-weight: 700; text-align: center; width: 100%; margin-bottom: 10px; }
-  .divider { width: 100%; max-width: 420px; height: 1px; background: var(--border); margin: 8px 0 16px; }
+  .divider { width: 100%; max-width: 420px; height: 2px; background: var(--border); margin: 12px 0 20px; border-radius: 2px; }
   
-  /* Confetti Animation for Win */
-  .emoji-pop { animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; display: inline-block; }
-  @keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+  .emoji-pop { animation: pop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; display: inline-block; }
+  @keyframes pop { 0% { transform: scale(0) rotate(-20deg); } 70% { transform: scale(1.3) rotate(10deg); } 100% { transform: scale(1) rotate(0deg); } }
+
+  /* Confetti for Grand Winner */
+  .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; }
+  @keyframes fall { 0% { opacity: 1; transform: translateY(-100vh) rotate(0deg); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg); } }
 
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -145,16 +149,15 @@
 </head>
 <body>
 
-<!-- رسائل التنبيه -->
 <div id="toast"></div>
 
 <!-- ==========================================
      الشاشة 1: البداية
 =========================================== -->
 <div id="screen-welcome" class="screen active">
-  <div style="margin-top:20px; margin-bottom:10px; font-size:3.5rem; text-align:center;">🔐</div>
+  <div style="margin-top:40px; margin-bottom:10px; font-size:4rem; text-align:center; animation: pop 1s ease;">🔐</div>
   <div class="logo">كسر<span>الشفرة</span></div>
-  <div class="tagline">تحدّ أصدقاءك، أرقام بدون تكرار!</div>
+  <div class="tagline">تخمين ذكي، تكتيك عالي، ومنافسة شرسة!</div>
 
   <div class="card">
     <div class="card-title">الاسم</div>
@@ -162,7 +165,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">صعوبة اللعبة (طول الشفرة)</div>
+    <div class="card-title">طول الشفرة (الصعوبة)</div>
     <div style="display:flex;gap:8px;justify-content:center;">
       <button class="btn btn-secondary combo-len-btn" data-len="3">3 أرقام</button>
       <button class="btn btn-primary combo-len-btn active-len" data-len="4">4 أرقام</button>
@@ -170,7 +173,7 @@
     </div>
   </div>
 
-  <div style="display:flex;gap:10px;width:100%;max-width:420px;">
+  <div style="display:flex;gap:10px;width:100%;max-width:420px; margin-top: 10px;">
     <button class="btn btn-primary" style="flex:1" onclick="createRoom()">🏠 إنشاء غرفة</button>
     <button class="btn btn-secondary" style="flex:1" onclick="showJoin()">🔗 انضمام</button>
   </div>
@@ -180,38 +183,38 @@
      الشاشة 2: غرفة المضيف (الانتظار)
 =========================================== -->
 <div id="screen-host" class="screen">
-  <div style="margin-top:40px"></div>
+  <div style="margin-top:60px"></div>
   <div class="logo">🏠 غرفتك</div>
   <div class="tagline">أرسل الرمز لصديقك ليدخل للغرفة</div>
 
   <div id="host-status" class="status-badge waiting">
-    <div class="pulse"></div><span>في انتظار اللاعب الثاني...</span>
+    <div class="pulse"></div><span>في انتظار اللاعب...</span>
   </div>
 
   <div class="card" style="text-align:center">
     <div class="card-title">رمز الغرفة</div>
-    <div class="room-code-display" onclick="copyRoomCode()" style="background: var(--surface2); border: 2px dashed var(--accent); border-radius: 10px; padding: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 1.8rem; font-weight: 700; color: var(--accent); letter-spacing: 6px; cursor: pointer;">
+    <div onclick="copyRoomCode()" style="background: var(--surface2); border: 2px dashed var(--accent); border-radius: 12px; padding: 18px; font-family: 'IBM Plex Mono', monospace; font-size: 2.2rem; font-weight: 700; color: var(--accent); letter-spacing: 8px; cursor: pointer; transition: all 0.2s;">
       <span id="roomCodeDisplay">----</span>
-      <small style="display: block; font-family: 'Cairo', sans-serif; font-size: 0.72rem; color: var(--muted); letter-spacing: 0; margin-top: 4px;">اضغط للنسخ 📋</small>
+      <small style="display: block; font-family: 'Cairo', sans-serif; font-size: 0.8rem; color: var(--muted); letter-spacing: 0; margin-top: 8px; font-weight: 700;">اضغط للنسخ 📋</small>
     </div>
   </div>
 
   <div id="opponentJoined" style="display:none;width:100%;max-width:420px">
-    <div class="card" style="text-align: center;">
-      <div class="card-title">انضم اللاعب</div>
-      <div style="font-size:1.3rem;font-weight:900;color:var(--green)" id="opponentNameHost">—</div>
+    <div class="card" style="text-align: center; border-color: var(--green);">
+      <div class="card-title" style="color:var(--green)">انضم اللاعب</div>
+      <div style="font-size:1.6rem;font-weight:900;color:#fff" id="opponentNameHost">—</div>
     </div>
-    <button class="btn btn-primary" onclick="startGame()">🚀 ابدأ المباراة</button>
+    <button class="btn btn-primary" onclick="startGame()" style="font-size: 1.2rem; padding: 16px;">🚀 ابدأ المباراة</button>
   </div>
 
-  <button class="btn btn-secondary" style="max-width:420px;width:100%;margin-top:10px;" onclick="goHome()">← إلغاء ورجوع</button>
+  <button class="btn btn-danger" style="max-width:420px;width:100%;margin-top:20px;" onclick="goHome()">إلغاء الغرفة</button>
 </div>
 
 <!-- ==========================================
      الشاشة 3: الانضمام
 =========================================== -->
 <div id="screen-join" class="screen">
-  <div style="margin-top:40px"></div>
+  <div style="margin-top:60px"></div>
   <div class="logo">🔗 انضمام</div>
   <div class="tagline">أدخل رمز الغرفة الذي أرسله صديقك</div>
 
@@ -222,11 +225,11 @@
   <div class="card">
     <div class="card-title">رمز الغرفة</div>
     <input type="text" id="joinCodeInput" placeholder="مثال: A1B2C3" maxlength="6"
-      style="text-transform:uppercase;letter-spacing:6px;font-family:'IBM Plex Mono',monospace;font-size:1.5rem">
+      style="text-transform:uppercase;letter-spacing:8px;font-family:'IBM Plex Mono',monospace;font-size:1.8rem">
   </div>
 
-  <div style="display:flex;gap:10px;width:100%;max-width:420px;">
-    <button class="btn btn-primary" style="flex:2" onclick="joinRoom()">دخول</button>
+  <div style="display:flex;gap:10px;width:100%;max-width:420px; margin-top: 10px;">
+    <button class="btn btn-primary" style="flex:2" onclick="joinRoom()">دخول الغرفة</button>
     <button class="btn btn-secondary" style="flex:1" onclick="goHome()">رجوع</button>
   </div>
 </div>
@@ -235,17 +238,17 @@
      الشاشة 4: إعداد الشفرة (Setup)
 =========================================== -->
 <div id="screen-setup" class="screen">
-  <div style="margin-top:30px"></div>
-  <div class="logo" style="font-size:2rem">🎯 جهّز شفرتك</div>
-  <div class="tagline" style="color:var(--accent);">تنبيه: يجب أن تكون الأرقام مختلفة (بدون تكرار)</div>
+  <div style="margin-top:40px"></div>
+  <div class="logo" style="font-size:2.2rem">🎯 جهّز شفرتك</div>
+  <div class="tagline" style="color:var(--text); font-weight: 600;">(مسموح بتكرار الأرقام لجعلها أصعب!)</div>
 
   <div class="card" style="text-align:center">
     <div class="card-title">شفرتك السرية</div>
     <div class="digit-row" id="setupDigits"></div>
-    <button class="btn btn-secondary" style="padding:10px; font-size:0.9rem;" onclick="randomizeSetup()">🎲 أرقام عشوائية</button>
+    <button class="btn btn-secondary" style="padding:12px; font-size:0.95rem; margin-top: 10px;" onclick="randomizeSetup()">🎲 أرقام عشوائية</button>
   </div>
 
-  <button id="btnConfirmCombo" class="btn btn-primary" style="max-width:420px;width:100%" onclick="confirmCombo()">✅ تأكيد الشفرة وإخفاؤها</button>
+  <button id="btnConfirmCombo" class="btn btn-primary" style="max-width:420px;width:100%; padding: 16px; font-size: 1.1rem;" onclick="confirmCombo()">✅ تأكيد الشفرة وبدء اللعب</button>
 
   <div id="waitingForOpponent" style="display:none;margin-top:20px;text-align:center;">
     <div class="status-badge waiting"><div class="pulse"></div><span>في انتظار خصمك ليجهز شفرته...</span></div>
@@ -255,19 +258,12 @@
 <!-- ==========================================
      الشاشة 5: اللعب والتخمين
 =========================================== -->
-<div id="screen-game" class="screen">
+<div id="screen-game" class="screen" style="padding-top: 10px;">
   
-  <!-- لوحة الصدارة -->
   <div class="leaderboard">
-    <div class="lb-player">
-      <div class="lb-name" id="myNameLB">أنت</div>
-      <div class="lb-score" id="myScoreLB">0</div>
-    </div>
-    <div class="lb-divider">🏆<span>الجلسة</span></div>
-    <div class="lb-player">
-      <div class="lb-name" id="oppNameLB">الخصم</div>
-      <div class="lb-score" id="oppScoreLB">0</div>
-    </div>
+    <div class="lb-player"><div class="lb-name" id="myNameLB">أنت</div><div class="lb-score" id="myScoreLB">0</div></div>
+    <div class="lb-divider">🏆<span style="font-size: 0.7rem;">النقاط</span></div>
+    <div class="lb-player"><div class="lb-name" id="oppNameLB">الخصم</div><div class="lb-score" id="oppScoreLB">0</div></div>
   </div>
 
   <div class="turn-banner my-turn" id="turnBanner">دورك — خمّن!</div>
@@ -275,11 +271,12 @@
   <div class="legend">
     <div class="legend-item"><div class="legend-dot green"></div>صح بمكانه</div>
     <div class="legend-item"><div class="legend-dot yellow"></div>صح بغير مكانه</div>
-    <div class="legend-item"><div class="legend-dot red"></div>غير موجود</div>
+    <div class="legend-item"><div class="legend-dot red"></div>خطأ</div>
+    <div class="divider" style="margin: 4px 0; height: 1px; width: 100%;"></div>
+    <div class="legend-item" style="width: 100%; justify-content: center;">
+      <span class="legend-hint">✨</span> = الرقم مكرر في شفرة الخصم
+    </div>
   </div>
-
-  <div class="section-label">تخميناتك <span style="font-weight:normal">(المحاولة: <span id="myAttemptCount">0</span>)</span></div>
-  <div class="guess-history" id="myGuessHistory"></div>
 
   <div class="guess-input-row" id="guessInputRow">
     <input type="text" inputmode="numeric" pattern="[0-9]*" id="guessInput" placeholder="0000" 
@@ -287,47 +284,73 @@
     <button id="btnSubmitGuess" class="btn btn-primary" onclick="submitGuess()">➤</button>
   </div>
 
+  <div style="font-size: 0.85rem; color: var(--text); font-weight: 800; text-align: right; width: 100%; max-width: 420px; margin-bottom: 8px;">سجل تخميناتك (المحاولة: <span id="myAttemptCount">0</span>)</div>
+  <div class="guess-history" id="myGuessHistory"></div>
+
   <div class="divider"></div>
 
-  <div class="section-label" style="opacity: 0.7;">تخمينات الخصم <span style="font-weight:normal">(المحاولة: <span id="oppAttemptCount">0</span>)</span></div>
-  <div class="guess-history" id="oppGuessHistory" style="opacity: 0.8; max-height: 20vh;"></div>
+  <div style="font-size: 0.8rem; color: var(--muted); font-weight: 700; text-align: right; width: 100%; max-width: 420px; margin-bottom: 8px; opacity: 0.8;">تخمينات الخصم (المحاولة: <span id="oppAttemptCount">0</span>)</div>
+  <div class="guess-history" id="oppGuessHistory" style="opacity: 0.7; max-height: 15vh;"></div>
 </div>
 
 <!-- ==========================================
-     الشاشة 6: النتيجة النهائية
+     الشاشة 6: النتيجة (Round Result)
 =========================================== -->
 <div id="screen-result" class="screen">
   <div style="margin-top:20px"></div>
   
-  <div class="leaderboard" style="background:transparent; border-color:transparent; box-shadow:none; margin-bottom: 0;">
-    <div class="lb-player"><div class="lb-name" id="resMyName">أنت</div><div class="lb-score" id="resMyScore">0</div></div>
-    <div class="lb-divider" style="font-size:1.5rem">VS</div>
-    <div class="lb-player"><div class="lb-name" id="resOppName">الخصم</div><div class="lb-score" id="resOppScore">0</div></div>
-  </div>
+  <div style="font-size: 5.5rem; text-align: center; margin-bottom: 10px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));" id="resultEmoji" class="emoji-pop">🏆</div>
+  <div style="font-size: 2.4rem; font-weight: 900; text-align: center; margin-bottom: 5px; color:var(--text)" id="resultTitle">فزت!</div>
+  <div style="text-align:center;color:var(--accent);margin-bottom:20px;font-size:1.1rem; font-weight: 700;" id="resultSub"></div>
 
-  <div style="font-size: 5rem; text-align: center; margin-bottom: 10px;" id="resultEmoji" class="emoji-pop">🏆</div>
-  <div style="font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 5px; color:var(--text)" id="resultTitle">فزت!</div>
-  <div style="text-align:center;color:var(--muted);margin-bottom:20px;font-size:1rem" id="resultSub"></div>
-
-  <div class="card" style="text-align:center">
-    <div style="margin-bottom:15px">
-      <div class="card-title">شفرتك (التي اختارها <span id="resMyLabel">أنت</span>)</div>
-      <div class="digit-row" id="mySecretReveal" style="margin:8px 0;"></div>
+  <div class="card" style="text-align:center; padding: 24px 20px;">
+    <div style="margin-bottom:20px">
+      <div class="card-title" style="color:#fff">شفرة الخصم (التي كنت تخمنها)</div>
+      <div class="digit-row" id="oppSecretReveal" style="margin:12px 0;"></div>
     </div>
     <div class="divider"></div>
     <div>
-      <div class="card-title">شفرة الخصم (التي حاولت كسرها)</div>
-      <div class="digit-row" id="oppSecretReveal" style="margin:8px 0;"></div>
+      <div class="card-title">شفرتك الخاصة</div>
+      <div class="digit-row" id="mySecretReveal" style="margin:12px 0; transform: scale(0.9); opacity: 0.8;"></div>
     </div>
   </div>
 
-  <div id="playAgainStatus" class="status-badge waiting" style="display:none; margin-bottom:15px;">
+  <div id="playAgainStatus" class="status-badge waiting" style="display:none; margin-bottom:20px;">
     <div class="pulse"></div><span id="playAgainText">في انتظار الخصم...</span>
   </div>
 
-  <div style="display:flex;gap:10px;width:100%;max-width:420px;">
-    <button id="btnPlayAgain" class="btn btn-primary" style="flex:2" onclick="requestPlayAgain()">🔄 جولة جديدة</button>
-    <button class="btn btn-secondary" style="flex:1" onclick="goHome()">🏠 خروج</button>
+  <div style="display:flex; flex-direction: column; gap:12px; width:100%; max-width:420px;">
+    <button id="btnPlayAgain" class="btn btn-primary" style="padding: 16px; font-size: 1.1rem;" onclick="requestPlayAgain()">🔄 جولة جديدة</button>
+    <button class="btn btn-danger" onclick="endSession()">🏁 إنهاء المباراة ورؤية البطل</button>
+  </div>
+</div>
+
+<!-- ==========================================
+     الشاشة 7: التتويج النهائي (Final Leaderboard)
+=========================================== -->
+<div id="screen-final" class="screen" style="justify-content: center; overflow: hidden; position: relative;">
+  <div id="confetti-container" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index: 1;"></div>
+  
+  <div style="z-index: 2; width: 100%; max-width: 420px; text-align: center;">
+    <div style="font-size: 5rem; margin-bottom: 10px; animation: pop 1s ease;">👑</div>
+    <h1 style="color: var(--accent); font-weight: 900; font-size: 2.5rem; margin-bottom: 5px;">نهاية المواجهة</h1>
+    <p style="color: var(--muted); font-size: 1.1rem; margin-bottom: 30px;">النتيجة النهائية للجلسة</p>
+
+    <div class="leaderboard" style="padding: 30px 20px; box-shadow: 0 15px 40px rgba(240,192,64,0.15); border-color: var(--accent);">
+      <div class="lb-player">
+        <div class="lb-name" id="finalMyName" style="font-size: 1.2rem; color: #fff;">أنت</div>
+        <div class="lb-score" id="finalMyScore" style="font-size: 3.5rem;">0</div>
+      </div>
+      <div class="lb-divider" style="font-size:2rem; color: var(--border);">VS</div>
+      <div class="lb-player">
+        <div class="lb-name" id="finalOppName" style="font-size: 1.2rem; color: #fff;">الخصم</div>
+        <div class="lb-score" id="finalOppScore" style="font-size: 3.5rem;">0</div>
+      </div>
+    </div>
+
+    <h2 id="finalWinnerText" style="color: var(--green); margin-bottom: 40px; font-size: 1.8rem; font-weight: 800;">لقد دمرت الخصم!</h2>
+
+    <button class="btn btn-secondary" style="padding: 16px; font-size: 1.1rem;" onclick="goHome()">🏠 العودة للرئيسية</button>
   </div>
 </div>
 
@@ -339,19 +362,16 @@ let peer = null, conn = null;
 let myName = '', opponentName = '';
 let isHost = false;
 let comboLength = 4;
-let myCombo = []; // الشفرة التي قمت أنا بإعدادها
-let roundCount = 0; // لحساب من يبدأ الدور
-
-// لوحة الصدارة
+let myCombo = []; 
+let roundCount = 0; 
 let sessionScores = { me: 0, opponent: 0 };
-
 let myTurn = false;
 let gameActive = false;
 let playAgainRequests = 0;
 let myReady = false, oppReady = false;
 
 // ==========================================
-//  أدوات مساعدة (Utils)
+//  أدوات الواجهة
 // ==========================================
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -361,7 +381,7 @@ function showScreen(id) {
 
 function toast(msg, dur=3000, icon='') {
   const t = document.getElementById('toast');
-  t.innerHTML = icon ? `${icon} <span>${msg}</span>` : `<span>${msg}</span>`;
+  t.innerHTML = icon ? `<span style="font-size:1.2rem">${icon}</span> <span>${msg}</span>` : `<span>${msg}</span>`;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), dur);
 }
@@ -374,6 +394,7 @@ function resetAllState() {
   isHost = false; gameActive = false;
   sessionScores = { me: 0, opponent: 0 };
   roundCount = 0;
+  document.getElementById('confetti-container').innerHTML = '';
   resetMatchState();
 }
 
@@ -392,8 +413,10 @@ function resetMatchState() {
   document.getElementById('btnPlayAgain').disabled = false;
   document.getElementById('playAgainStatus').style.display = 'none';
   document.getElementById('btnSubmitGuess').disabled = false;
-  document.getElementById('guessInput').value = '';
-  document.getElementById('guessInput').classList.remove('shake');
+  
+  const input = document.getElementById('guessInput');
+  input.value = '';
+  input.classList.remove('shake');
 }
 
 function goHome() {
@@ -401,7 +424,6 @@ function goHome() {
   showScreen('screen-welcome');
 }
 
-// اختيار طول الشفرة
 document.querySelectorAll('.combo-len-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     comboLength = parseInt(btn.dataset.len);
@@ -419,17 +441,10 @@ function updateLeaderboardUI() {
   document.getElementById('oppNameLB').textContent = opponentName || 'الخصم';
   document.getElementById('myScoreLB').textContent = sessionScores.me;
   document.getElementById('oppScoreLB').textContent = sessionScores.opponent;
-  
-  // تحديث شاشة النهاية أيضاً
-  document.getElementById('resMyName').textContent = myName || 'أنت';
-  document.getElementById('resOppName').textContent = opponentName || 'الخصم';
-  document.getElementById('resMyScore').textContent = sessionScores.me;
-  document.getElementById('resOppScore').textContent = sessionScores.opponent;
-  document.getElementById('resMyLabel').textContent = myName || 'أنت';
 }
 
 // ==========================================
-//  الاتصال بالشبكة (PeerJS)
+//  الشبكة PeerJS
 // ==========================================
 function genRoomId() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -438,37 +453,25 @@ function genRoomId() {
 
 async function initPeer(id) {
   return new Promise((resolve, reject) => {
-    const p = new Peer(id, {
-      config: { iceServers: [{urls:'stun:stun.l.google.com:19302'}] }
-    });
+    const p = new Peer(id, { config: { iceServers: [{urls:'stun:stun.l.google.com:19302'}] } });
     p.on('open', () => resolve(p));
     p.on('error', err => reject(err));
   });
 }
 
-// --- المضيف ---
 async function createRoom() {
   myName = document.getElementById('playerName').value.trim() || 'المضيف';
   showScreen('screen-host');
-
   const roomId = genRoomId();
   document.getElementById('roomCodeDisplay').textContent = roomId;
   document.getElementById('opponentJoined').style.display = 'none';
 
-  try {
-    peer = await initPeer('codebreaker-' + roomId);
-  } catch(e) {
-    setHostStatus('error', 'فشل الاتصال بالخادم، حاول ثانية');
-    return;
-  }
+  try { peer = await initPeer('codebreaker-' + roomId); } 
+  catch(e) { setHostStatus('error', 'فشل الاتصال بالخادم، حاول ثانية'); return; }
 
   isHost = true;
   setHostStatus('waiting', 'في انتظار اللاعب الثاني...');
-
-  peer.on('connection', c => {
-    conn = c;
-    setupConn();
-  });
+  peer.on('connection', c => { conn = c; setupConn(); });
 }
 
 function setHostStatus(type, msg) {
@@ -479,7 +482,7 @@ function setHostStatus(type, msg) {
 
 function copyRoomCode() {
   const code = document.getElementById('roomCodeDisplay').textContent.trim();
-  navigator.clipboard.writeText(code).then(() => toast('✅ تم نسخ رمز الغرفة!'));
+  navigator.clipboard.writeText(code).then(() => toast('✅ تم نسخ الرمز!'));
 }
 
 function startGame() {
@@ -489,7 +492,6 @@ function startGame() {
   showSetupScreen();
 }
 
-// --- الضيف ---
 function showJoin() {
   myName = document.getElementById('playerName').value.trim() || 'الضيف';
   document.getElementById('joinCodeInput').value = '';
@@ -504,45 +506,36 @@ async function joinRoom() {
   const statusEl = document.getElementById('join-status');
   statusEl.style.display = 'inline-flex';
   statusEl.className = 'status-badge waiting';
-  document.getElementById('join-status-text').textContent = 'جاري البحث عن الغرفة...';
+  document.getElementById('join-status-text').textContent = 'جاري البحث...';
 
-  try {
-    peer = await initPeer('codebreaker-guest-' + Date.now());
-  } catch(e) {
-    statusEl.className = 'status-badge error';
-    document.getElementById('join-status-text').textContent = 'فشل الاتصال بالخادم';
-    return;
-  }
+  try { peer = await initPeer('codebreaker-guest-' + Date.now()); } 
+  catch(e) { statusEl.className = 'status-badge error'; document.getElementById('join-status-text').textContent = 'فشل الاتصال'; return; }
 
   isHost = false;
   conn = peer.connect('codebreaker-' + code, { reliable: true });
   setupConn();
 }
 
-// ==========================================
-//  معالجة الاتصال والرسائل
-// ==========================================
 function setupConn() {
   conn.on('open', () => {
     if(!isHost) {
       send({ type:'hello', name: myName });
       const statusEl = document.getElementById('join-status');
       statusEl.className = 'status-badge connected';
-      document.getElementById('join-status-text').textContent = 'متصل! في انتظار المضيف ليبدأ...';
+      document.getElementById('join-status-text').textContent = 'متصل! في انتظار المضيف...';
     }
   });
 
   conn.on('data', handleMessage);
 
   conn.on('close', () => {
+    if(document.getElementById('screen-final').classList.contains('active')) return; // تجاهل إذا انتهت اللعبة طبيعياً
     toast('⚠️ انقطع الاتصال بالخصم!');
-    setTimeout(goHome, 2000);
+    setTimeout(goHome, 2500);
   });
 }
 
-function send(data) {
-  if(conn && conn.open) conn.send(data);
-}
+function send(data) { if(conn && conn.open) conn.send(data); }
 
 function handleMessage(msg) {
   switch(msg.type) {
@@ -550,58 +543,32 @@ function handleMessage(msg) {
       opponentName = msg.name;
       document.getElementById('opponentNameHost').textContent = opponentName;
       document.getElementById('opponentJoined').style.display = 'block';
-      setHostStatus('connected', 'اكتمل النصاب! متصل بـ ' + opponentName);
+      setHostStatus('connected', 'متصل بـ ' + opponentName);
       send({ type:'welcome', name: myName });
       break;
-
-    case 'welcome':
-      opponentName = msg.name;
-      break;
-
+    case 'welcome': opponentName = msg.name; break;
     case 'start_setup':
       comboLength = msg.comboLength;
       resetMatchState();
       updateLeaderboardUI();
       showSetupScreen();
       break;
-
-    case 'ready':
-      oppReady = true;
-      checkBothReady();
-      break;
-
-    case 'guess':
-      handleOpponentGuess(msg.digits);
-      break;
-
-    case 'guess_result':
-      handleMyGuessResult(msg);
-      break;
-      
-    case 'request_secret':
-      // الخصم يطلب شفرتي لأنه خسر ويريد عرضها
-      send({ type: 'reveal_secret', secret: myCombo });
-      break;
-      
-    case 'reveal_secret':
-      // استلمت شفرة الخصم لعرضها في الشاشة النهائية
-      buildRevealDigits('oppSecretReveal', msg.secret);
-      break;
-
-    case 'play_again':
-      playAgainRequests++;
-      checkPlayAgain();
-      break;
+    case 'ready': oppReady = true; checkBothReady(); break;
+    case 'guess': handleOpponentGuess(msg.digits); break;
+    case 'guess_result': handleMyGuessResult(msg); break;
+    case 'request_secret': send({ type: 'reveal_secret', secret: myCombo }); break;
+    case 'reveal_secret': buildRevealDigits('oppSecretReveal', msg.secret); break;
+    case 'play_again': playAgainRequests++; checkPlayAgain(); break;
+    case 'end_session': showFinalLeaderboard(); break;
   }
 }
 
 // ==========================================
-//  شاشة الإعداد (Setup) - ضمان أرقام غير مكررة
+//  الإعداد (Setup)
 // ==========================================
 function showSetupScreen() {
   const container = document.getElementById('setupDigits');
   container.innerHTML = '';
-  
   for(let i=0; i<comboLength; i++) {
     const slot = document.createElement('div');
     slot.className = 'digit-slot secret';
@@ -614,41 +581,22 @@ function showSetupScreen() {
     `;
     container.appendChild(slot);
   }
-  
   randomizeSetup();
   showScreen('screen-setup');
 }
 
 function changeSetupDigit(index, dir) {
   const el = document.getElementById(`setup_d${index}`);
-  let v = parseInt(el.textContent);
-
-  // جمع الأرقام المستخدمة حالياً في الخانات الأخرى
-  let used = [];
-  for(let i=0; i<comboLength; i++) {
-    if(i !== index) used.push(parseInt(document.getElementById(`setup_d${i}`).textContent));
-  }
-
-  // البحث عن الرقم التالي غير المستخدم
-  for(let i=0; i<10; i++) {
-    v = (v + dir + 10) % 10;
-    if(!used.includes(v)) {
-      el.textContent = v;
-      // إضافة تأثير حركي خفيف
-      el.style.transform = 'scale(1.3)';
-      setTimeout(() => el.style.transform = 'scale(1)', 150);
-      break;
-    }
-  }
+  let v = (parseInt(el.textContent) + dir + 10) % 10; // مسموح التكرار
+  el.textContent = v;
+  el.style.transform = 'scale(1.3)';
+  setTimeout(() => el.style.transform = 'scale(1)', 150);
 }
 
 function randomizeSetup() {
-  // توليد مصفوفة أرقام عشوائية غير مكررة
-  let nums = [0,1,2,3,4,5,6,7,8,9];
-  nums.sort(() => Math.random() - 0.5);
   for(let i=0; i<comboLength; i++) {
     const el = document.getElementById(`setup_d${i}`);
-    el.textContent = nums[i];
+    el.textContent = Math.floor(Math.random() * 10);
     el.style.transform = 'scale(1.3)';
     setTimeout(() => el.style.transform = 'scale(1)', 150);
   }
@@ -656,32 +604,23 @@ function randomizeSetup() {
 
 function confirmCombo() {
   myCombo = [];
-  for(let i=0; i<comboLength; i++) {
-    myCombo.push(parseInt(document.getElementById(`setup_d${i}`).textContent));
-  }
+  for(let i=0; i<comboLength; i++) myCombo.push(parseInt(document.getElementById(`setup_d${i}`).textContent));
 
   myReady = true;
   document.getElementById('btnConfirmCombo').disabled = true;
   document.getElementById('waitingForOpponent').style.display = 'block';
-  
   send({ type:'ready' });
   checkBothReady();
 }
 
-function checkBothReady() {
-  if(myReady && oppReady) {
-    startActualGame();
-  }
-}
+function checkBothReady() { if(myReady && oppReady) startActualGame(); }
 
 // ==========================================
-//  نظام اللعب والتخمين (Game)
+//  اللعب (Game & Evaluation)
 // ==========================================
 function startActualGame() {
   gameActive = true;
   roundCount++;
-  
-  // تبديل من يبدأ اللعب بين الجولات
   myTurn = isHost ? (roundCount % 2 !== 0) : (roundCount % 2 === 0);
   
   const input = document.getElementById('guessInput');
@@ -698,18 +637,17 @@ function updateTurnBanner() {
   const inputRow = document.getElementById('guessInputRow');
   if(myTurn) {
     banner.className = 'turn-banner my-turn';
-    banner.textContent = '⚡ دورك — أدخل تخمينك!';
+    banner.innerHTML = '⚡ دورك — أدخل تخمينك!';
     inputRow.style.display = 'flex';
     setTimeout(() => document.getElementById('guessInput').focus(), 100);
   } else {
     banner.className = 'turn-banner their-turn';
-    banner.textContent = `⏳ دور ${opponentName} يفكر...`;
+    banner.innerHTML = `⏳ دور <span style="color:#fff">${opponentName}</span> يفكر...`;
     inputRow.style.display = 'none';
   }
 }
 
 function limitGuessInput(input) {
-  // إزالة الأحرف غير الرقمية
   input.value = input.value.replace(/[^0-9]/g, '').slice(0, comboLength);
   input.classList.remove('shake');
 }
@@ -720,53 +658,70 @@ function submitGuess() {
   const raw = inputEl.value.trim();
   
   if(raw.length !== comboLength) {
-    toast(`يجب إدخال ${comboLength} أرقام!`, 2000, '⚠️');
+    toast(`أدخل ${comboLength} أرقام!`, 2000, '⚠️');
     inputEl.classList.add('shake');
     setTimeout(() => inputEl.classList.remove('shake'), 400);
     return;
   }
 
   const digits = raw.split('').map(Number);
-  
-  // منع الأرقام المكررة في التخمين!
-  if(new Set(digits).size !== digits.length) {
-    toast('غير مسموح بالأرقام المكررة!', 2000, '❌');
-    inputEl.classList.add('shake');
-    setTimeout(() => inputEl.classList.remove('shake'), 400);
-    return;
-  }
-  
   document.getElementById('btnSubmitGuess').disabled = true;
   inputEl.value = '';
   myTurn = false;
   updateTurnBanner();
-  
   send({ type:'guess', digits });
 }
 
-// --- تقييم التخمين (الخصم أرسل تخمينه لشفرتي) ---
+// --- خوارزمية التقييم الاحترافية لدعم الأرقام المكررة ---
+function evaluateGuessMastermind(guess, secret) {
+  let result = Array(guess.length).fill(null);
+  let secretCopy = [...secret];
+  let guessCopy = [...guess];
+
+  // 1. فحص الأخضر (الرقم الصحيح في المكان الصحيح)
+  for(let i=0; i<guess.length; i++) {
+    if(guessCopy[i] === secretCopy[i]) {
+      let countInSecret = secret.filter(x => x === guessCopy[i]).length;
+      result[i] = { status: 'green', multi: countInSecret > 1 };
+      secretCopy[i] = null; // إزالة الرقم لمنع التكرار في الفحص
+      guessCopy[i] = null;
+    }
+  }
+
+  // 2. فحص الأصفر (الرقم موجود ولكن في مكان خاطئ)
+  for(let i=0; i<guess.length; i++) {
+    if(guessCopy[i] !== null) {
+      let idx = secretCopy.indexOf(guessCopy[i]);
+      if(idx !== -1) {
+        let countInSecret = secret.filter(x => x === guessCopy[i]).length;
+        result[i] = { status: 'yellow', multi: countInSecret > 1 };
+        secretCopy[idx] = null;
+      } else {
+        result[i] = { status: 'red', multi: false };
+      }
+    }
+  }
+  return result;
+}
+
 function handleOpponentGuess(digits) {
-  const result = evaluateGuess(digits, myCombo);
-  const won = result.every(r => r === 'green');
+  const resultObj = evaluateGuessMastermind(digits, myCombo);
+  const won = resultObj.every(r => r.status === 'green');
   
-  addGuessRow('opp', digits, result);
+  addGuessRow('opp', digits, resultObj);
   
-  // إرسال النتيجة للخصم، ومرفق بها شفرتي إذا فاز
   send({ 
     type: 'guess_result', 
     digits: digits, 
-    result: result, 
+    result: resultObj, 
     won: won,
     oppSecret: won ? myCombo : null
   });
 
   if(won) {
-    // الخصم فاز (أنا خسرت)
     sessionScores.opponent++;
     updateLeaderboardUI();
-    
-    // إنهاء اللعبة عندي، وأطلب شفرته لأعرضها
-    endGame(false, myCombo);
+    endRound(false, myCombo);
     send({ type: 'request_secret' });
   } else {
     myTurn = true;
@@ -774,39 +729,19 @@ function handleOpponentGuess(digits) {
   }
 }
 
-// --- استلام نتيجة تخميني من الخصم ---
 function handleMyGuessResult(data) {
   document.getElementById('btnSubmitGuess').disabled = false;
-  
   addGuessRow('my', data.digits, data.result);
   
   if(data.won) {
-    // أنا فزت!
     sessionScores.me++;
     updateLeaderboardUI();
-    
-    // data.oppSecret هو الشفرة التي حاولت كسرها
-    endGame(true, myCombo); 
+    endRound(true, myCombo); 
     buildRevealDigits('oppSecretReveal', data.oppSecret);
   }
 }
 
-// --- دالة التقييم ---
-function evaluateGuess(guess, secret) {
-  const result = Array(secret.length).fill('red');
-  
-  for(let i=0; i<secret.length; i++) {
-    if(guess[i] === secret[i]) {
-      result[i] = 'green';
-    } else if(secret.includes(guess[i])) {
-      result[i] = 'yellow';
-    }
-  }
-  return result;
-}
-
-// --- رسم التخمينات في الشاشة (مع 3D Animations) ---
-function addGuessRow(type, digits, result) {
+function addGuessRow(type, digits, resultObj) {
   const container = document.getElementById(type + 'GuessHistory');
   const counterEl = document.getElementById(type + 'AttemptCount');
   
@@ -826,10 +761,10 @@ function addGuessRow(type, digits, result) {
   
   digits.forEach((d, i) => {
     const dEl = document.createElement('div');
-    dEl.className = 'guess-digit ' + result[i];
+    dEl.className = 'guess-digit ' + resultObj[i].status;
+    if(resultObj[i].multi) dEl.classList.add('has-multi'); // التلميح
     dEl.textContent = d;
-    // تأخير متدرج للحركة لكل رقم
-    dEl.style.animationDelay = `${i * 0.15}s`;
+    dEl.style.animationDelay = `${i * 0.1}s`;
     dgEl.appendChild(dEl);
   });
   
@@ -838,37 +773,30 @@ function addGuessRow(type, digits, result) {
 }
 
 // ==========================================
-//  نهاية اللعبة وجولة جديدة
+//  نهاية الجولة
 // ==========================================
-function endGame(iWon, myFinalSecret) {
+function endRound(iWon, myFinalSecret) {
   gameActive = false;
-
   const emoji = document.getElementById('resultEmoji');
-  emoji.textContent = iWon ? '🏆' : '💀';
-  
-  // إعادة تشغيل الحركة
+  emoji.textContent = iWon ? '🏆' : '💥';
   emoji.classList.remove('emoji-pop');
-  void emoji.offsetWidth; // Trigger reflow
+  void emoji.offsetWidth; 
   emoji.classList.add('emoji-pop');
 
-  document.getElementById('resultTitle').textContent = iWon ? 'لقد فزت!' : 'لقد خسرت!';
+  document.getElementById('resultTitle').textContent = iWon ? 'لقد دمرت الشفرة!' : 'تم اختراق شفرتك!';
+  document.getElementById('resultTitle').style.color = iWon ? 'var(--green)' : 'var(--red)';
   
   const myGuesses = document.getElementById('myAttemptCount').textContent;
   const oppGuesses = document.getElementById('oppAttemptCount').textContent;
   
   document.getElementById('resultSub').textContent = iWon
-    ? `كسرت الشفرة في ${myGuesses} محاولة!`
-    : `استطاع ${opponentName} كسر شفرتك في ${oppGuesses} محاولة!`;
+    ? `كسرت شفرة ${opponentName} في ${myGuesses} محاولة`
+    : `كسر ${opponentName} شفرتك في ${oppGuesses} محاولة`;
 
-  // رسم شفرتي الخاصة بي بشكل صريح وثابت
   buildRevealDigits('mySecretReveal', myFinalSecret);
-  
-  // رسم مؤقت لشفرة الخصم حتى تصل عبر الشبكة (إذا خسرت)
-  if(!iWon) {
-    buildRevealDigits('oppSecretReveal', Array(comboLength).fill('?'));
-  }
+  if(!iWon) buildRevealDigits('oppSecretReveal', Array(comboLength).fill('?'));
 
-  setTimeout(() => showScreen('screen-result'), 1000); // تأخير بسيط لرؤية نتيجة التخمين الأخير
+  setTimeout(() => showScreen('screen-result'), 1200); 
 }
 
 function buildRevealDigits(id, combo) {
@@ -878,27 +806,24 @@ function buildRevealDigits(id, combo) {
     const slot = document.createElement('div');
     slot.className = 'digit-slot secret';
     slot.style.width = '45px'; slot.style.height = '55px';
-    slot.style.animation = `fadeUpIn 0.3s ease forwards`;
+    slot.style.animation = `fadeUpIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`;
     slot.style.animationDelay = `${i * 0.1}s`;
     slot.style.opacity = '0';
     
     const val = document.createElement('div');
     val.className = 'digit-val';
-    val.style.fontSize = '1.6rem';
+    val.style.fontSize = '1.8rem';
     val.textContent = d;
     slot.appendChild(val);
     el.appendChild(slot);
   });
 }
 
-// --- نظام اللعب مرة أخرى ---
 function requestPlayAgain() {
   document.getElementById('btnPlayAgain').disabled = true;
   document.getElementById('playAgainStatus').style.display = 'inline-flex';
-  
   playAgainRequests++;
   send({ type:'play_again' });
-  
   checkPlayAgain();
 }
 
@@ -912,10 +837,61 @@ function checkPlayAgain() {
     }
   } else if (playAgainRequests === 1) {
     if(!document.getElementById('btnPlayAgain').disabled) {
-      toast(`${opponentName} جاهز لجولة جديدة!`, 3000, '🔄');
+      toast(`${opponentName} جاهز للانتقام!`, 3000, '🔥');
       document.getElementById('playAgainText').textContent = 'الخصم جاهز، بانتظارك...';
       document.getElementById('playAgainStatus').style.display = 'inline-flex';
     }
+  }
+}
+
+// ==========================================
+//  نهاية الجلسة بالكامل (Final Leaderboard)
+// ==========================================
+function endSession() {
+  send({ type: 'end_session' });
+  showFinalLeaderboard();
+}
+
+function showFinalLeaderboard() {
+  gameActive = false;
+  
+  document.getElementById('finalMyName').textContent = myName || 'أنت';
+  document.getElementById('finalOppName').textContent = opponentName || 'الخصم';
+  document.getElementById('finalMyScore').textContent = sessionScores.me;
+  document.getElementById('finalOppScore').textContent = sessionScores.opponent;
+
+  const winnerText = document.getElementById('finalWinnerText');
+  if(sessionScores.me > sessionScores.opponent) {
+    winnerText.textContent = '👑 أنت البطل المطلق!';
+    winnerText.style.color = 'var(--green)';
+    createConfetti();
+  } else if (sessionScores.me < sessionScores.opponent) {
+    winnerText.textContent = `💀 ${opponentName} سحقك!`;
+    winnerText.style.color = 'var(--red)';
+  } else {
+    winnerText.textContent = '🤝 تعادل ملحمي!';
+    winnerText.style.color = 'var(--yellow)';
+  }
+
+  showScreen('screen-final');
+  
+  // إغلاق الاتصال بأمان بعد العرض
+  setTimeout(() => {
+    if(conn) conn.close();
+  }, 1000);
+}
+
+function createConfetti() {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#f0c040', '#2ecc71', '#e74c3c', '#3498db', '#9b59b6'];
+  for(let i=0; i<60; i++) {
+    const conf = document.createElement('div');
+    conf.className = 'confetti';
+    conf.style.left = Math.random() * 100 + 'vw';
+    conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    conf.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+    conf.style.animationDelay = `${Math.random() * 1}s`;
+    container.appendChild(conf);
   }
 }
 </script>
